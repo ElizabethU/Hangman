@@ -2,11 +2,12 @@ require 'colorize'
 
 class Hangman
 
-  def initialize(word)
-    @secret_word = word
+  def initialize(hash = {})
+    @secret_word = hash[:word] || File.readlines("possible_words.txt").sample.strip
     @so_far = "-" * @secret_word.length
     @num_wrong = 0
     @guessed_list = []
+    @secret_word.upcase!
     status
     guess_a_letter
   end
@@ -19,7 +20,7 @@ class Hangman
   def guess_a_letter
     until winning || losing
       puts "What letter would you like to guess?"
-      guess = gets.chomp
+      guess = gets.chomp.upcase
       if guessed_multiple_letters(guess)
         puts "Please guess #{'one letter'.red} at a time."
       elsif same_guess(guess)
@@ -157,4 +158,4 @@ class Hangman
   end
 end
 
-my_game = Hangman.new("turtle")
+my_game = Hangman.new
